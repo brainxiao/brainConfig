@@ -2,6 +2,8 @@
 ### author:brain
 ### date:2019.09.25
 ### run this script to config your home
+#######################################
+#######################################
 VERSION=1.0.0
 HOME_DIR=$HOME
 BASHRC=${HOME_DIR}/.bashrc 
@@ -34,7 +36,7 @@ function config {
        echo "config home"
        cat src/.bashrc > $BASHRC
        cat src/.vimrc > $VIMRC
-       cat src/.vim_mru_files > $VIM_MRU
+       #cat src/.vim_mru_files > $VIM_MRU
        #cp -rf src/bin/ $BIN
        cp -rf src/MyTool/ $HOME_DIR
        #cp -rf src/.vim/ $HOME_DIR
@@ -45,7 +47,7 @@ function sync {
         cat $BASHRC > src/.bashrc 
         cat $VIMRC > src/.vimrc 
         #cat $VIM_MRU > src/.vim_mru_files 
-        cp -rf $MYTOOL_DIR src/MyTool/ 
+        cp -rf $MYTOOL_DIR src/ 
         #cp -rf $VIM_DIR src/.vim/ 
         #cp -rf $BIN > 
 }
