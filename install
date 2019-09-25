@@ -1,0 +1,11 @@
+#!/bin/bash 
+### author:brain
+### date:2019.09.25
+### first time install to use
+cd src
+tar -xvf vim.tar.gz
+cp -rf .vim $HOME/
+rm -rf .vim
+cd ..
+#./config.sh -c
+
