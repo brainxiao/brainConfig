@@ -7,7 +7,7 @@ HOME_DIR=$HOME
 BASHRC=${HOME_DIR}/.bashrc 
 BIN=${HOME_DIR}/bin
 MYTOOL_DIR=${HOME_DIR}/MyTool
-VIMRC=${HOME_DIR}/.VIMRC
+VIMRC=${HOME_DIR}/.vimrc
 #VIM_DIR=${HOME_DIR}/.vim 
 VIM_MRU=${HOME_DIR}/.vim_mru_files
 export PATH=$(pwd):$PATH
@@ -44,8 +44,8 @@ function sync {
         echo "sync home"
         cat $BASHRC > src/.bashrc 
         cat $VIMRC > src/.vimrc 
-        cat $VIM_MRU > src/.vim_mru_files 
-        cp -rf $MYTOOL_DIR > src/MyTool/ 
+        #cat $VIM_MRU > src/.vim_mru_files 
+        cp -rf $MYTOOL_DIR src/MyTool/ 
         #cp -rf $VIM_DIR src/.vim/ 
         #cp -rf $BIN > 
 }
