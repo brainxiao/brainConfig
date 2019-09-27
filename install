@@ -8,5 +8,5 @@ cp -rf .vim $HOME/
 cp .vim_mru_files $HOME/
 rm -rf .vim
 cd ..
-#./config.sh -c
+./config.sh -c
 
