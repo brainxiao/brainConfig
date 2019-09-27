@@ -33,7 +33,8 @@ function makeln {
         echo "make link done"
 }
 function config { 
-       echo "config home"
+       echo "========config home======="
+       echo "git >>>>>>>>>>>>>> Home"
        cat src/.bashrc > $BASHRC
        cat src/.vimrc > $VIMRC
        #cat src/.vim_mru_files > $VIM_MRU
@@ -41,15 +42,18 @@ function config {
        cp -rf src/MyTool/ $HOME_DIR
        #cp -rf src/.vim/ $HOME_DIR
        makeln
+       echo "sync done"
 }
 function sync {
-        echo "sync home"
+        echo "========sync home========"
+        echo "Home >>>>>>>>>>>>>> git"
         cat $BASHRC > src/.bashrc 
         cat $VIMRC > src/.vimrc 
         #cat $VIM_MRU > src/.vim_mru_files 
         cp -rf $MYTOOL_DIR src/ 
         #cp -rf $VIM_DIR src/.vim/ 
         #cp -rf $BIN > 
+        echo "sync done"
 }
 function help {
         echo "config.sh edit by Brain.version $VERSION"
