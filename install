@@ -2,11 +2,24 @@
 ### author:brain
 ### date:2019.09.25
 ### first time install to use
+echo "开始安装"
 cd src
+echo "正在解压文件......"
 tar -xvf vim.tar.gz
-cp -rf .vim $HOME/
-cp .vim_mru_files $HOME/
-rm -rf .vim
+echo "解压完成"
+echo "拷贝.vim目录......"
+cp -rf vim/.vim $HOME/
+echo "拷贝完成"
+if [ ! -e $HOME/.vim_mru_files ]
+then
+        echo "拷贝 .vim_mru_files" 
+        cp vim/.vim_mru_files $HOME/
+        echo "拷贝完成"
+fi
+echo "清除文件......"
+rm -rf vim
+echo "清楚文件完成"
 cd ..
-./config.sh -c
-
+echo "开始处理配置文件"
+#./config.sh -c
+echo "完成安装"
