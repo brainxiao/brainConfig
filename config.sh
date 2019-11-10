@@ -6,7 +6,8 @@
 #######################################
 VERSION=1.0.0
 HOME_DIR=$HOME
-BASHRC=${HOME_DIR}/.bashrc 
+BASHRC=${HOME_DIR}/.bashrc
+TMUX=${HOME_DIR}/.tmux.conf
 BIN=${HOME_DIR}/bin
 MYTOOL_DIR=${HOME_DIR}/MyTool
 VIMRC=${HOME_DIR}/.vimrc
@@ -42,6 +43,7 @@ function config {
        showdiff src/MyTool/ $HOME_DIR/MyTool
        cat src/.bashrc > $BASHRC
        cat src/.vimrc > $VIMRC
+       cat src/.tmux.conf > $TMUX
        cp -rf src/MyTool/ $HOME_DIR
        makeln
        echo "config done"
