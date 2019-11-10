@@ -141,3 +141,6 @@ alias my_make_tags='my_cscope_files && my_cscope_tags'
 
 #default use PY3
 alias python='python3'
+
+#兼容tmux
+alias tmux="tmux -2"
