@@ -139,3 +139,5 @@ alias my_cscope_tags='ctags -R --c++-kinds=+p --fields=+iaS --extra=+q && cscope
 alias my_cscope_files='find . -iregex ".*\(\.h\|\.c\|\.cpp\|\.mk\|\.ini\|\.java\|\.sh\|\.cfg\|\.xml\|\Makefile\|\.rc\|\.conf\|\.aidl\)$" > cscope.files'
 alias my_make_tags='my_cscope_files && my_cscope_tags'
 
+#default use PY3
+alias python='python3'
