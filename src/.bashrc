@@ -138,9 +138,52 @@ export PATH=~/.local/bin:~/bin:$PATH
 alias my_cscope_tags='ctags -R --c++-kinds=+p --fields=+iaS --extra=+q && cscope -Rbq'
 alias my_cscope_files='find . -iregex ".*\(\.h\|\.c\|\.cpp\|\.mk\|\.ini\|\.java\|\.sh\|\.cfg\|\.xml\|\Makefile\|\.rc\|\.conf\|\.aidl\)$" > cscope.files'
 alias my_make_tags='my_cscope_files && my_cscope_tags'
+#兼容tmux
+alias tmux="tmux -2"
+#export TERM=screen-256color
+Is_Empty() {
+    if [ "$1" = "" ]
+    then
+            return 0
+    else
+            return 1
+    fi
+}
+
+do_push(){
+        find_git_branch
+        local git_branch=$(echo $git_branch | sed "s/(\(.*\)).*/\1/g")
+        local local_ver=$(echo $git_branch | grep -Po "\d+.\d+\.\d+")
+        echo $local_ver
+        if [ "local_ver" != "" ]
+        then
+                local last_stable_ver=$(cvt-baseline-versions | grep laststable | grep -Po "\d+.\d+\.\d+")
+                echo last
+                echo $last_stable_ver
+                if [ "$last_stable_ver" != "$local_ver" ]
+                then
+                        read -p "你的本地基线版本不是最新基线版本，确认是否继续(Y/N)(默认继续)?" PUSH_CODE
+                        if [ $PUSH_CODE = 'N' ] && [ $PUSH_CODE = 'n' ]
+                        then
+                                echo "exit......"
+                                return 1
+                        fi
+                fi
+
+        fi
+        if git remote -v | grep "tv@git.gz.cvte.cn"
+        then
+                echo "It's a git"
+                PUSH_RESULT=$(git push origin $git_branch)
+        else
+                echo "Is's not a git"
+                PUSH_RESULT=$(git gt-dpush origin $git_branch)
+        fi
+}
 
 #default use PY3
 alias python='python3'
 
 #兼容tmux
 alias tmux="tmux -2"
+export do_push
