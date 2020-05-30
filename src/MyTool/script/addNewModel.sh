@@ -124,12 +124,14 @@ commit_change() {
                 exit 2
         fi
 
+        read -ep "除了 add customer config 外你想添加的log内容：" extra_log
+
         ###
         ###compent the commit msg
         ###
         COMMIT_MSG="[config][$CUSTOMER][$MODEL_ID]add customer config
 
-        [what]add customer config
+        [what]add customer config $extra_log
         [why]none
         [how]none"
         echo "======================================"
@@ -149,7 +151,7 @@ do_push(){
                 echo last
                 if [ "$last_stable_ver" != "$local_ver" ]
                 then
-                        read -p "你的本地基线版本不是最新基线版本，确认是否继续(Y/N)(默认继续)?" PUSH_CODE
+                        read -ep "你的本地基线版本不是最新基线版本，确认是否继续(Y/N)(默认继续)?" PUSH_CODE
                         if [ $PUSH_CODE = 'N' ] && [ $PUSH_CODE = 'n' ]
                         then
                                 echo "exit......"
@@ -168,8 +170,16 @@ do_push(){
         fi
 }
 
+stash(){
+        read -ep "stash the other change?(Y/N)[Yes for default]:" stash_sign
+        if [ "$PUSH_CODE" != "n" ] && [ "$PUSH_CODE" != "N" ]
+        then
+                git stash
+        fi
+}
+
 push(){
-        read -p "Push the code?(Y/N):" PUSH_CODE
+        read -ep "Push the code?(Y/N):" PUSH_CODE
         if [ $PUSH_CODE != 'Y' ] && [ $PUSH_CODE != 'y' ]
         then
                 echo "exit......"
@@ -206,14 +216,20 @@ push(){
 build(){
         local build_sign
         echo "========================================="
-        read -p "Input if you want to build the software in jenkins(Y/N): "  build_sign
+        read -ep "Input if you want to build the software in jenkins(Y/N): "  build_sign
         echo 
-        if [ $build_sign = 'Y' ] || [ $build_sign == 'y' ]
+        if [ $build_sign == 'Y' ] || [ $build_sign == 'y' ]
         then
+                read -ep "输入软件要发送到的邮箱(不发送请输入N/n)：" mail
                 echo "go into pyocs......"
                 cdx customers
                 pwd
-                pyocs jenkins $MODEL_ID
+                if [ $mail == 'N' ] || [ $mail == 'n' ]
+                then
+                    pyocs jenkins $MODEL_ID
+                else
+                    pyocs jenkins $MODEL_ID --mail $mail
+                fi
         fi
 }
 
@@ -230,6 +246,7 @@ check_param $#
 add_file $@
 echo "going to commit......"
 sleep 2
+stash
 commit_change $@
 push
 if [ $? -ne 1 ]
