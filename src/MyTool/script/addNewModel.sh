@@ -138,7 +138,7 @@ commit_change() {
         echo "COMMIT_MSG:"
         echo -e "$COMMIT_MSG"
         echo "======================================"
-        COMMIT_RESULT=$(git commit -m "$COMMIT_MSG")       
+        git commit -m "$COMMIT_MSG" 
 }
 
 do_push(){
@@ -172,9 +172,16 @@ do_push(){
 
 stash(){
         read -ep "stash the other change?(Y/N)[Yes for default]:" stash_sign
-        if [ "$PUSH_CODE" != "n" ] && [ "$PUSH_CODE" != "N" ]
+        if [ "$stash_sign" != "n" ] && [ "$stash_sign" != "N" ]
         then
                 git stash
+        fi
+}
+
+stash_pop(){
+        if [ "$stash_sign" != "n" ] && [ "$stash_sign" != "N" ]
+        then
+                git stash pop
         fi
 }
 
@@ -246,11 +253,11 @@ check_param $#
 add_file $@
 echo "going to commit......"
 sleep 2
-stash
 commit_change $@
+stash
 push
 if [ $? -ne 1 ]
 then
     build
 fi
-
+stash_pop
