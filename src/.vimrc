@@ -193,6 +193,8 @@ colorscheme skeletor
 "Tab使用4个空格
 set ts=4
 set expandtab
+set autoindent
+
 
 "标签栏设置
 set tabpagemax=18    "VIM默认只能打开10个标签页，在配置文件可以修改这个限制

@@ -138,6 +138,7 @@ export PATH=~/.local/bin:~/bin:$PATH
 alias my_cscope_tags='ctags -R --c++-kinds=+p --fields=+iaS --extra=+q && cscope -Rbq'
 alias my_cscope_files='find . -iregex ".*\(\.h\|\.c\|\.cpp\|\.mk\|\.ini\|\.java\|\.sh\|\.cfg\|\.xml\|\Makefile\|\.rc\|\.conf\|\.aidl\)$" > cscope.files'
 alias my_make_tags='my_cscope_files && my_cscope_tags'
+alias docker='docker_auto_choose'
 #兼容tmux
 alias tmux="tmux -2"
 #export TERM=screen-256color

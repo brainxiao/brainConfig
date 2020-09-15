@@ -1,12 +1,15 @@
 #!/bin/sh 
 ### this script is used to commit the new model_id
 ### author:xiaozhitao
-### version:1.1.0
+### version:1.2.0
 ### proudly presented by CVTE
 
-### 
+### mail 列表的建立：此列表用于pyocs时根据输入的客户名去抓对应的邮箱地址
+### 文件名字： .cus_mail
+### 文件路径：客户根目录下
 
 PUSH_TIME=0
+CUS_MAIL_MSG=0
 
 find_git_branch () {
     local dir=. head
@@ -152,7 +155,7 @@ do_push(){
                 if [ "$last_stable_ver" != "$local_ver" ]
                 then
                         read -ep "你的本地基线版本不是最新基线版本，确认是否继续(Y/N)(默认继续)?" PUSH_CODE
-                        if [ $PUSH_CODE = 'N' ] && [ $PUSH_CODE = 'n' ]
+                        if [ $PUSH_CODE = "N" ] && [ $PUSH_CODE = "n" ]
                         then
                                 echo "exit......"
                                 return 1
@@ -174,7 +177,12 @@ stash(){
         read -ep "stash the other change?(Y/N)[Yes for default]:" stash_sign
         if [ "$stash_sign" != "n" ] && [ "$stash_sign" != "N" ]
         then
-                git stash
+                stash_result=$(git stash)
+                echo -e $stash_result
+                if [[ "$stash_result" =~ "No local changes to save" ]]
+                then
+                        stash_sign="n"
+                fi
         fi
 }
 
@@ -187,7 +195,7 @@ stash_pop(){
 
 push(){
         read -ep "Push the code?(Y/N):" PUSH_CODE
-        if [ $PUSH_CODE != 'Y' ] && [ $PUSH_CODE != 'y' ]
+        if [ "$PUSH_CODE" != "Y" ] && [ "$PUSH_CODE" != "y" ]
         then
                 echo "exit......"
                 return 1
@@ -220,22 +228,71 @@ push(){
         fi
 }
 
+get_mail_address(){
+        if [ -f $HOME/.cus_mail ]
+        then
+                #echo "cus_mail config file exist"
+                while read line
+                do
+                        local cus_name=$(echo ${line%% *})
+                        if [[ "$cus_name" =~ "$1" ]]
+                        then
+                                mail_address=$(echo "$line" | sed "s/$1//" | sed "s/ //")
+                                CUS_MAIL_MSG=$line
+                                return 0
+                        fi
+                done < /$HOME/.cus_mail
+        else
+                echo "please add the file: .cus_mail to $HOME"
+        fi
+        if [ $CUS_MAIL_MSG -eq 0 ]
+        then
+                print_err "can not find this customer message"
+                return 1
+        fi
+}
+
+time_delay(){
+        tput sc
+        time=$1
+        while [ $time -gt 0 ]
+        do
+                tput rc
+                tput ed
+                echo -n "倒数$time秒..."
+                sleep 1
+                time=$((time - 1))
+        done
+        echo
+}
+
 build(){
         local build_sign
         echo "========================================="
         read -ep "Input if you want to build the software in jenkins(Y/N): "  build_sign
         echo 
-        if [ $build_sign == 'Y' ] || [ $build_sign == 'y' ]
+        if [ "$build_sign" == "Y" ] || [ "$build_sign" == "y" ]
         then
-                read -ep "输入软件要发送到的邮箱(不发送请输入N/n)：" mail
-                echo "go into pyocs......"
-                cdx customers
-                pwd
-                if [ $mail == 'N' ] || [ $mail == 'n' ]
+                read -ep "输入软件要发送到的客户(N/n 默认不发送)：" mail_cus
+                #pwd
+                get_mail_address $mail_cus
+                if [ $? -ne 0 ] || [ "$mail_cus" == "N" ] || [ "$mail_cus" == "n" ] || [ "$mail_cus" == "" ]
                 then
                     pyocs jenkins $MODEL_ID
                 else
-                    pyocs jenkins $MODEL_ID --mail $mail
+                    echo "============================================"
+                    echo "============================================"
+                    read -ep "输入发送的邮件标题：" mail_title
+                    echo "================确认以下信息=================="
+                    print_err "客户：$mail_cus"
+                    print_err "邮箱：$mail_address"
+                    print_err "标题：$mail_title"
+                    echo
+                    echo
+                    cdx customers
+                    #time_delay 5
+                    echo "go into pyocs......"
+                    pyocs jenkins $MODEL_ID --mail "$mail_address" --mail_title "$mail_title"
                 fi
         fi
 }
