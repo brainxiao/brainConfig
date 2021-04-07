@@ -122,6 +122,18 @@ get_log_msg(){
     then
             log_msg_add_content "country"
     fi
+    if echo $git_diff | grep "LAUNCHER" > /dev/null
+    then
+            log_msg_add_content "launcher type"
+    fi
+    if echo $git_diff | grep "OCS" > /dev/null
+    then
+            log_msg_add_content "OCS number"
+    fi
+    if echo $git_diff | grep "TUNER" > /dev/null 
+    then
+            log_msg_add_content "TUNER TYPE"
+    fi
 
 
    

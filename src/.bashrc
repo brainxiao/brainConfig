@@ -188,3 +188,6 @@ alias python='python3'
 #兼容tmux
 alias tmux="tmux -2"
 export do_push
+
+#vscode
+#~/MyTool/script/vscode-service.sh &
